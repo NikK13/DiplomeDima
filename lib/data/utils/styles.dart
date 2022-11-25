@@ -49,8 +49,6 @@ ThemeData themeLight = ThemeData(
   iconTheme: const IconThemeData(
     color: Colors.white,
   ),
-  useMaterial3: isIosApplication ?
-  false : true,
   textTheme: const TextTheme(
     button: textStyleBtnLight,
   ),
@@ -63,8 +61,6 @@ ThemeData themeDark = ThemeData(
   iconTheme: const IconThemeData(
     color: Colors.black,
   ),
-  useMaterial3: isIosApplication ?
-  false : true,
   //floatingActionButtonTheme: fabTheme,
   textTheme: TextTheme(
     button: textStyleBtnDark,

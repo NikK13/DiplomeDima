@@ -11,34 +11,36 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i6;
-import 'package:diplome_dima/data/model/car.dart' as _i9;
-import 'package:diplome_dima/data/utils/guards.dart' as _i8;
-import 'package:diplome_dima/ui/fragments/cars.dart' as _i4;
-import 'package:diplome_dima/ui/fragments/orders.dart' as _i5;
+import 'package:auto_route/auto_route.dart' as _i8;
+import 'package:diplome_dima/data/model/car.dart' as _i11;
+import 'package:diplome_dima/data/utils/guards.dart' as _i10;
+import 'package:diplome_dima/ui/fragments/cars.dart' as _i6;
+import 'package:diplome_dima/ui/fragments/orders.dart' as _i7;
 import 'package:diplome_dima/ui/pages/cars_edit.dart' as _i3;
+import 'package:diplome_dima/ui/pages/catalog.dart' as _i5;
+import 'package:diplome_dima/ui/pages/details_car.dart' as _i4;
 import 'package:diplome_dima/ui/pages/home.dart' as _i2;
 import 'package:diplome_dima/ui/pages/login.dart' as _i1;
-import 'package:flutter/material.dart' as _i7;
+import 'package:flutter/material.dart' as _i9;
 
-class AppRouter extends _i6.RootStackRouter {
+class AppRouter extends _i8.RootStackRouter {
   AppRouter({
-    _i7.GlobalKey<_i7.NavigatorState>? navigatorKey,
+    _i9.GlobalKey<_i9.NavigatorState>? navigatorKey,
     required this.checkIfUserLoggedIn,
   }) : super(navigatorKey);
 
-  final _i8.CheckIfUserLoggedIn checkIfUserLoggedIn;
+  final _i10.CheckIfUserLoggedIn checkIfUserLoggedIn;
 
   @override
-  final Map<String, _i6.PageFactory> pagesMap = {
+  final Map<String, _i8.PageFactory> pagesMap = {
     LoginPageRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginPage(),
       );
     },
     HomePageRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i2.HomePage(),
       );
@@ -46,7 +48,7 @@ class AppRouter extends _i6.RootStackRouter {
     CarsEditPageRoute.name: (routeData) {
       final args = routeData.argsAs<CarsEditPageRouteArgs>(
           orElse: () => const CarsEditPageRouteArgs());
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
         child: _i3.CarsEditPage(
           key: args.key,
@@ -54,52 +56,69 @@ class AppRouter extends _i6.RootStackRouter {
         ),
       );
     },
-    CarsFragmentRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+    CarDetailsPageRoute.name: (routeData) {
+      final args = routeData.argsAs<CarDetailsPageRouteArgs>(
+          orElse: () => const CarDetailsPageRouteArgs());
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i4.CarsFragment(),
+        child: _i4.CarDetailsPage(
+          key: args.key,
+          car: args.car,
+        ),
+      );
+    },
+    CatalogPageRoute.name: (routeData) {
+      return _i8.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i5.CatalogPage(),
+      );
+    },
+    CarsFragmentRoute.name: (routeData) {
+      return _i8.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i6.CarsFragment(),
       );
     },
     OrdersFragmentRoute.name: (routeData) {
-      return _i6.AdaptivePage<dynamic>(
+      return _i8.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i5.OrdersFragment(),
+        child: const _i7.OrdersFragment(),
       );
     },
   };
 
   @override
-  List<_i6.RouteConfig> get routes => [
-        _i6.RouteConfig(
+  List<_i8.RouteConfig> get routes => [
+        _i8.RouteConfig(
           '/#redirect',
           path: '/',
           redirectTo: '/login',
           fullMatch: true,
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           LoginPageRoute.name,
           path: '/login',
           guards: [checkIfUserLoggedIn],
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           HomePageRoute.name,
           path: '',
           guards: [checkIfUserLoggedIn],
           children: [
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               '#redirect',
               path: '',
               parent: HomePageRoute.name,
               redirectTo: 'cars',
               fullMatch: true,
             ),
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               CarsFragmentRoute.name,
               path: 'cars',
               parent: HomePageRoute.name,
               guards: [checkIfUserLoggedIn],
             ),
-            _i6.RouteConfig(
+            _i8.RouteConfig(
               OrdersFragmentRoute.name,
               path: 'orders',
               parent: HomePageRoute.name,
@@ -107,12 +126,22 @@ class AppRouter extends _i6.RootStackRouter {
             ),
           ],
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
           CarsEditPageRoute.name,
           path: '/carInfo',
           guards: [checkIfUserLoggedIn],
         ),
-        _i6.RouteConfig(
+        _i8.RouteConfig(
+          CarDetailsPageRoute.name,
+          path: '/details',
+          guards: [checkIfUserLoggedIn],
+        ),
+        _i8.RouteConfig(
+          CatalogPageRoute.name,
+          path: '/catalog',
+          guards: [checkIfUserLoggedIn],
+        ),
+        _i8.RouteConfig(
           '*#redirect',
           path: '*',
           redirectTo: '/',
@@ -123,7 +152,7 @@ class AppRouter extends _i6.RootStackRouter {
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginPageRoute extends _i6.PageRouteInfo<void> {
+class LoginPageRoute extends _i8.PageRouteInfo<void> {
   const LoginPageRoute()
       : super(
           LoginPageRoute.name,
@@ -135,8 +164,8 @@ class LoginPageRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.HomePage]
-class HomePageRoute extends _i6.PageRouteInfo<void> {
-  const HomePageRoute({List<_i6.PageRouteInfo>? children})
+class HomePageRoute extends _i8.PageRouteInfo<void> {
+  const HomePageRoute({List<_i8.PageRouteInfo>? children})
       : super(
           HomePageRoute.name,
           path: '',
@@ -148,10 +177,10 @@ class HomePageRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CarsEditPage]
-class CarsEditPageRoute extends _i6.PageRouteInfo<CarsEditPageRouteArgs> {
+class CarsEditPageRoute extends _i8.PageRouteInfo<CarsEditPageRouteArgs> {
   CarsEditPageRoute({
-    _i7.Key? key,
-    _i9.Car? car,
+    _i9.Key? key,
+    _i11.Car? car,
   }) : super(
           CarsEditPageRoute.name,
           path: '/carInfo',
@@ -170,9 +199,9 @@ class CarsEditPageRouteArgs {
     this.car,
   });
 
-  final _i7.Key? key;
+  final _i9.Key? key;
 
-  final _i9.Car? car;
+  final _i11.Car? car;
 
   @override
   String toString() {
@@ -181,8 +210,54 @@ class CarsEditPageRouteArgs {
 }
 
 /// generated route for
-/// [_i4.CarsFragment]
-class CarsFragmentRoute extends _i6.PageRouteInfo<void> {
+/// [_i4.CarDetailsPage]
+class CarDetailsPageRoute extends _i8.PageRouteInfo<CarDetailsPageRouteArgs> {
+  CarDetailsPageRoute({
+    _i9.Key? key,
+    _i11.Car? car,
+  }) : super(
+          CarDetailsPageRoute.name,
+          path: '/details',
+          args: CarDetailsPageRouteArgs(
+            key: key,
+            car: car,
+          ),
+        );
+
+  static const String name = 'CarDetailsPageRoute';
+}
+
+class CarDetailsPageRouteArgs {
+  const CarDetailsPageRouteArgs({
+    this.key,
+    this.car,
+  });
+
+  final _i9.Key? key;
+
+  final _i11.Car? car;
+
+  @override
+  String toString() {
+    return 'CarDetailsPageRouteArgs{key: $key, car: $car}';
+  }
+}
+
+/// generated route for
+/// [_i5.CatalogPage]
+class CatalogPageRoute extends _i8.PageRouteInfo<void> {
+  const CatalogPageRoute()
+      : super(
+          CatalogPageRoute.name,
+          path: '/catalog',
+        );
+
+  static const String name = 'CatalogPageRoute';
+}
+
+/// generated route for
+/// [_i6.CarsFragment]
+class CarsFragmentRoute extends _i8.PageRouteInfo<void> {
   const CarsFragmentRoute()
       : super(
           CarsFragmentRoute.name,
@@ -193,8 +268,8 @@ class CarsFragmentRoute extends _i6.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.OrdersFragment]
-class OrdersFragmentRoute extends _i6.PageRouteInfo<void> {
+/// [_i7.OrdersFragment]
+class OrdersFragmentRoute extends _i8.PageRouteInfo<void> {
   const OrdersFragmentRoute()
       : super(
           OrdersFragmentRoute.name,

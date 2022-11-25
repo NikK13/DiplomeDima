@@ -3,10 +3,14 @@ import 'package:diplome_dima/data/utils/guards.dart';
 import 'package:diplome_dima/ui/fragments/cars.dart';
 import 'package:diplome_dima/ui/fragments/orders.dart';
 import 'package:diplome_dima/ui/pages/cars_edit.dart';
+import 'package:diplome_dima/ui/pages/catalog.dart';
+import 'package:diplome_dima/ui/pages/details_car.dart';
 import 'package:diplome_dima/ui/pages/home.dart';
 import 'package:diplome_dima/ui/pages/login.dart';
 
 const String loginPath = "/login";
+const String catalogPath = "/catalog";
+const String detailsPath = "/details";
 const String carInfoPath = "/carInfo";
 const String settingsPagePath = "/settings";
 const String homePath = "";
@@ -41,9 +45,18 @@ const String ordersPath = "orders";
       ]
     ),
     AutoRoute(
-      initial: true,
       page: CarsEditPage,
       path: carInfoPath,
+      guards: [CheckIfUserLoggedIn]
+    ),
+    AutoRoute(
+      page: CarDetailsPage,
+      path: detailsPath,
+      guards: [CheckIfUserLoggedIn]
+    ),
+    AutoRoute(
+      page: CatalogPage,
+      path: catalogPath,
       guards: [CheckIfUserLoggedIn]
     ),
     RedirectRoute(path: '*', redirectTo: "/")

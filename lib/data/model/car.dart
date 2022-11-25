@@ -3,7 +3,7 @@ import 'package:diplome_dima/data/utils/extensions.dart';
 import 'package:diplome_dima/data/utils/lists.dart';
 import 'package:diplome_dima/data/utils/router.gr.dart';
 import 'package:diplome_dima/main.dart';
-import 'package:diplome_dima/ui/dialogs/car_update_dialog.dart';
+import 'package:diplome_dima/ui/widgets/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +17,13 @@ class Car{
   String? comp;
   bool? isEnabled;
 
+  bool? isNew;
+  String? transmission;
+  String? engineValue;
+  String? releaseDate;
+  String? gearBox;
+  String? fuelType;
+
   Car({
     this.key,
     this.type,
@@ -25,6 +32,12 @@ class Car{
     this.price,
     this.image,
     this.comp,
+    this.fuelType,
+    this.engineValue,
+    this.gearBox,
+    this.releaseDate,
+    this.isNew,
+    this.transmission,
     this.isEnabled
   });
 
@@ -37,7 +50,13 @@ class Car{
       price: json['price'],
       desc: json['desc'],
       comp: json['comp'],
-      isEnabled: json['is_enabled']
+      isEnabled: json['is_enabled'],
+      transmission: json['transmission'],
+      gearBox: json['gearbox'],
+      fuelType: json['fuel_type'],
+      engineValue: json['engine_value'],
+      releaseDate: json['release_date'],
+      isNew: json['is_new']
     );
   }
 
@@ -49,6 +68,12 @@ class Car{
     'comp': comp,
     'desc': desc,
     'is_enabled': isEnabled,
+    'transmission': transmission,
+    'gearbox': gearBox,
+    'fuel_type': fuelType,
+    'engine_value': engineValue,
+    'release_date': releaseDate,
+    'is_new': isNew,
   };
 }
 
@@ -85,12 +110,14 @@ class _CarItemState extends State<CarItem> {
                 Padding(
                   padding: const EdgeInsets.all(6.0),
                   child: AspectRatio(
-                    aspectRatio: 16 / 9,
+                    aspectRatio: isAsAdministrator ?
+                    (16 / 8) : 16 / 7,
                     child: widget.car!.image!.isNotEmpty ?
                     Image.network(widget.car!.image!) :
                     emptyImage,
                   ),
                 ),
+                if(isAsAdministrator)
                 Positioned(
                   top: 6,
                   left: 8,
@@ -177,6 +204,17 @@ class _CarItemState extends State<CarItem> {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold
+              ),
+            ),
+            const SizedBox(height: 6),
+            if(!isAsAdministrator)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: AppButton(
+                text: "Детали",
+                onPressed: (){
+                  context.router.push(CarDetailsPageRoute(car: widget.car));
+                },
               ),
             )
           ],

@@ -19,15 +19,15 @@ class AppBloc extends BaseBloc{
 
   Function(List<Car>?) get loadAllCars => _cars.sink.add;
 
-  Future<void> callCarsStreams() async{
+  Future<void> callCarsStreams([bool? isNew]) async{
     if(carsList.isNotEmpty){
       carsList.clear();
     }
-    carsList.addAll((await loadAvailableCars())!.toList());
+    carsList.addAll((await loadAvailableCars(isNew))!.toList());
     await loadAllCars(carsList);
   }
 
-  Future<List<Car>?> loadAvailableCars() async{
+  Future<List<Car>?> loadAvailableCars([bool? isNew]) async{
     final query = await FirebaseDatabase.instance.ref("cars").once();
     if(query.snapshot.exists){
       final List<Car> list = [];
@@ -36,8 +36,30 @@ class AppBloc extends BaseBloc{
         final singleItem = Car.fromJson(item.key!, item.value as Map<String, dynamic>);
         list.add(singleItem);
       }
-      return isAsAdministrator ? list :
-      list.where((element) => element.isEnabled! == true).toList();
+      if(isAsAdministrator){
+        if(isNew == null){
+          return list;
+        }
+        else if(isNew){
+          return list.where((element) => element.isNew == true).toList();
+        }
+        else{
+          return list.where((element) => element.isNew == false).toList();
+        }
+      }
+      else{
+        if(isNew == null){
+          return list.where((element) => element.isEnabled == true).toList();
+        }
+        else if(isNew){
+          return list.where((element) => element.isEnabled == true
+              && element.isNew == true).toList();
+        }
+        else{
+          return list.where((element) => element.isNew == false
+              && element.isEnabled == true).toList();
+        }
+      }
     }
     else{
       return [];
