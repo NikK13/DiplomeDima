@@ -1,9 +1,15 @@
 import 'package:diplome_dima/data/model/car.dart';
+import 'package:diplome_dima/data/model/order.dart';
+import 'package:diplome_dima/data/utils/constants.dart';
 import 'package:diplome_dima/data/utils/extensions.dart';
 import 'package:diplome_dima/data/utils/lists.dart';
+import 'package:diplome_dima/main.dart';
+import 'package:diplome_dima/ui/dialogs/info_order_dialog.dart';
 import 'package:diplome_dima/ui/widgets/apppage.dart';
 import 'package:diplome_dima/ui/widgets/button.dart';
+import 'package:diplome_dima/ui/widgets/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CarDetailsPage extends StatefulWidget {
   final Car? car;
@@ -56,20 +62,48 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: AppButton(
-                      text: "Тест-драйв",
-                      onPressed: (){
-
-                      },
+                    child: FutureBuilder(
+                      future: appBloc.checkCarAlreadyTestDrive(widget.car!.key!, firebaseBloc.fbUser!.uid),
+                      builder: (context, AsyncSnapshot<bool> snapshot) {
+                        if(snapshot.hasData){
+                          if(snapshot.data!){
+                            return const Center(child: Text("Уже оформлен тест-драйв"));
+                          }
+                          return AppButton(
+                            text: "Тест-драйв",
+                            onPressed: () async{
+                              showCustomDialog(context, OrderInfoDialog(
+                                isTestDrive: true,
+                                sendData: sendData,
+                              ));
+                            },
+                          );
+                        }
+                        return const LoadingView();
+                      }
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: AppButton(
-                      text: "Оформить",
-                      onPressed: (){
-
-                      },
+                    child:  FutureBuilder(
+                      future: appBloc.checkCarAlreadyOrdered(widget.car!.key!, firebaseBloc.fbUser!.uid),
+                      builder: (context, AsyncSnapshot<bool> snapshot) {
+                        if(snapshot.hasData){
+                          if(snapshot.data!){
+                            return const Center(child: Text("Уже оформлен предзаказ"));
+                          }
+                          return AppButton(
+                            text: "Предзаказ",
+                            onPressed: () async{
+                              showCustomDialog(context, OrderInfoDialog(
+                                isTestDrive: false,
+                                sendData: sendData,
+                              ));
+                            },
+                          );
+                        }
+                        return const LoadingView();
+                      }
                     ),
                   ),
                 ],
@@ -80,5 +114,26 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
         ),
       ),
     );
+  }
+
+  void sendData(String name, String email, String phone, [bool isTestDrive = true]) async{
+    !isTestDrive ? await appBloc.requestToBuy(
+      firebaseBloc.fbUser!.uid,
+      Order(
+        carKey: widget.car!.key,
+        name: name, phone: phone, email: email,
+        date: DateFormat(dateFormat24h).format(DateTime.now())
+      )
+    ) : await appBloc.requestTestDrive(
+      firebaseBloc.fbUser!.uid,
+      Order(
+        carKey: widget.car!.key,
+        name: name, phone: phone, email: email,
+        date: DateFormat(dateFormat24h).format(DateTime.now())
+      )
+    );
+    setState(() {
+      appBloc.checkCarAlreadyOrdered(widget.car!.key!, firebaseBloc.fbUser!.uid);
+    });
   }
 }

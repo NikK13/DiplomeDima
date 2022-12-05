@@ -31,7 +31,7 @@ List<ListItem> get fuelTypes => List.from([
 List<ListItem> get carsTypes => List.from([
   ListItem("Все", 'all'),
   ListItem("Новые", 'new'),
-  ListItem("Поддержанные", 'old'),
+  ListItem("С пробегом", 'old'),
 ]);
 
 List<ListItem> get engineValues => List.from([

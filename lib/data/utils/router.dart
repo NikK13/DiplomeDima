@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:diplome_dima/data/utils/guards.dart';
 import 'package:diplome_dima/ui/fragments/cars.dart';
 import 'package:diplome_dima/ui/fragments/orders.dart';
+import 'package:diplome_dima/ui/fragments/test_drives.dart';
 import 'package:diplome_dima/ui/pages/cars_edit.dart';
 import 'package:diplome_dima/ui/pages/catalog.dart';
 import 'package:diplome_dima/ui/pages/details_car.dart';
@@ -16,6 +17,7 @@ const String settingsPagePath = "/settings";
 const String homePath = "";
 
 const String carsPath = "cars";
+const String testDrPath = "testDrives";
 const String ordersPath = "orders";
 
 @AdaptiveAutoRouter(
@@ -35,6 +37,11 @@ const String ordersPath = "orders";
           initial: true,
           page: CarsFragment,
           path: carsPath,
+          guards: [CheckIfUserLoggedIn]
+        ),
+        AutoRoute(
+          page: TestDrivesFragment,
+          path: testDrPath,
           guards: [CheckIfUserLoggedIn]
         ),
         AutoRoute(

@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                             const Text(
                               App.appName,
                               style: TextStyle(
-                                fontSize: 32,
+                                fontSize: 48,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 3.5
                               ),

@@ -157,7 +157,7 @@ class _CarsEditPageState extends State<CarsEditPage> {
                             child: Center(
                               child: RadioListTile(
                                 value: false,
-                                title: const Text("Поддержанное авто"),
+                                title: const Text("Автомобиль с пробегом"),
                                 groupValue: _isCarNew,
                                 activeColor: appColor,
                                 onChanged: (val) {
@@ -198,7 +198,7 @@ class _CarsEditPageState extends State<CarsEditPage> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: DropdownPicker(
-                              title: "Трансмиссия",
+                              title: "Привод",
                               myValue: _transmission.value,
                               items: transmissions,
                               darkColor: const Color(0xFF242424),

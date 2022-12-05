@@ -1,4 +1,5 @@
 import 'package:diplome_dima/data/model/car.dart';
+import 'package:diplome_dima/data/model/order.dart';
 import 'package:diplome_dima/main.dart';
 import 'package:diplome_dima/ui/bloc/bloc.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -25,6 +26,27 @@ class AppBloc extends BaseBloc{
     }
     carsList.addAll((await loadAvailableCars(isNew))!.toList());
     await loadAllCars(carsList);
+  }
+
+  Future<List<Order>?> loadAllOrders([bool isTestDrive = true]) async{
+    final query = await FirebaseDatabase.instance.ref(
+        isTestDrive ? "test_drive" : "orders").once();
+    if(query.snapshot.exists){
+      final List<Order> allOrders = [];
+      final usersInOrders = query.snapshot.children;
+      for(var item in usersInOrders){
+        final userOrders = item.children;
+        for(var item in userOrders){
+          final singleItem = Order.fromJson(item.key!, item.value as Map<String, dynamic>);
+          allOrders.add(singleItem);
+        }
+      }
+      print(allOrders.toString());
+      return allOrders;
+    }
+    else{
+      return [];
+    }
   }
 
   Future<List<Car>?> loadAvailableCars([bool? isNew]) async{
@@ -83,6 +105,52 @@ class AppBloc extends BaseBloc{
     await FirebaseStorage.instance.refFromURL(car.image!).delete();
   }
 
+  Future<void> requestTestDrive(String userId, Order order) async{
+    final ref = FirebaseDatabase.instance.ref("test_drive/$userId").push();
+    await ref.set(order.toJson());
+  }
+
+  Future<void> requestToBuy(String userId, Order order) async{
+    final ref = FirebaseDatabase.instance.ref("orders/$userId").push();
+    await ref.set(order.toJson());
+  }
+
+  Future<bool> checkCarAlreadyTestDrive(String carId, String userId) async{
+    final ref = await FirebaseDatabase.instance.ref("test_drive/$userId").once();
+    if(ref.snapshot.exists){
+      bool isOrdered = false;
+      final data = ref.snapshot.children;
+      for(var item in data){
+        final singleItem = Order.fromJson(item.key!, item.value as Map<String, dynamic>);
+        if(singleItem.carKey == carId){
+          isOrdered = true;
+        }
+      }
+      return isOrdered;
+    }
+    else{
+      return false;
+    }
+  }
+
+  Future<bool> checkCarAlreadyOrdered(String carId, String userId) async{
+    final ref = await FirebaseDatabase.instance.ref("orders/$userId").once();
+    if(ref.snapshot.exists){
+      bool isOrdered = false;
+      final data = ref.snapshot.children;
+      for(var item in data){
+        final singleItem = Order.fromJson(item.key!, item.value as Map<String, dynamic>);
+        if(singleItem.carKey == carId){
+          isOrdered = true;
+        }
+      }
+      return isOrdered;
+    }
+    else{
+      return false;
+    }
+  }
+
   Future<String> uploadNewPhoto(String carKey, image) async {
     final ref = FirebaseStorage.instance
       .refFromURL("gs://diplomedima.appspot.com")
@@ -100,6 +168,6 @@ class AppBloc extends BaseBloc{
 
   @override
   void dispose() {
-
+    _cars.close();
   }
 }

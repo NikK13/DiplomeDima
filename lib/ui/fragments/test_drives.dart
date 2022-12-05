@@ -3,15 +3,15 @@ import 'package:diplome_dima/main.dart';
 import 'package:diplome_dima/ui/widgets/loading.dart';
 import 'package:flutter/material.dart';
 
-class OrdersFragment extends StatelessWidget {
-  const OrdersFragment({Key? key}) : super(key: key);
+class TestDrivesFragment extends StatelessWidget {
+  const TestDrivesFragment({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder(
-          future: appBloc.loadAllOrders(false),
+          future: appBloc.loadAllOrders(),
           builder: (context, AsyncSnapshot<List<Order>?> snapshot){
             if(snapshot.hasData){
               if(snapshot.data!.isNotEmpty){
@@ -20,7 +20,7 @@ class OrdersFragment extends StatelessWidget {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index){
                     return OrderItem(
-                      isTestDrive: false,
+                      isTestDrive: true,
                       order: snapshot.data![index],
                     );
                   },

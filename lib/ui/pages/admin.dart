@@ -33,8 +33,8 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           child: Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width > 130
-                ? 130 : MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width > 145
+                ? 145 : MediaQuery.of(context).size.width,
                 child: Drawer(
                   child: Column(
                     children: [
@@ -50,10 +50,19 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                       ),
                       drawerTile(
                         context,
-                        "Заказы",
-                        Icons.add_chart_rounded,
+                        "Тест-драйвы",
+                        Icons.car_rental,
                         (){
                           setState(() => _currentIndex = 1);
+                          context.router.navigate(const TestDrivesFragmentRoute());
+                        }
+                      ),
+                      drawerTile(
+                        context,
+                        "Предзаказы",
+                        Icons.add_chart_rounded,
+                        (){
+                          setState(() => _currentIndex = 2);
                           context.router.navigate(const OrdersFragmentRoute());
                         }
                       ),
@@ -79,6 +88,7 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                 child: AutoTabsScaffold(
                   routes: [
                     CarsFragmentRoute(),
+                    TestDrivesFragmentRoute(),
                     OrdersFragmentRoute()
                   ],
                 )

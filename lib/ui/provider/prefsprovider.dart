@@ -1,5 +1,3 @@
-import 'dart:ui';
-import 'package:diplome_dima/data/model/preferences.dart';
 import 'package:diplome_dima/data/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

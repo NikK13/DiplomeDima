@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class App {
-  static const String appName = "ФелОкт";
+  static const String appName = "Skoda";
   static String platform = defaultTargetPlatform.name;
 
   static const appPadding = EdgeInsets.only(
