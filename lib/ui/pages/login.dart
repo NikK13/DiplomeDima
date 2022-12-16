@@ -50,31 +50,40 @@ class _LoginPageState extends State<LoginPage> {
         child: FutureBuilder(
           future: loadingFuture,
           builder: (context, snapshot) {
-            return snapshot.connectionState == ConnectionState.done ? Padding(
-              padding: const EdgeInsets.all(20),
-              child: Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width > 380 ?
-                  380 : MediaQuery.of(context).size.width,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: ClipRRect(
+            return snapshot.connectionState == ConnectionState.done ? Stack(
+              alignment: AlignmentDirectional.centerStart,
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    "assets/main_bg.jpg",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  left: 32,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width > 380 ?
+                    380 : MediaQuery.of(context).size.width,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        color: Colors.white
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(height: 8),
-                            const Text(
-                              App.appName,
-                              style: TextStyle(
-                                fontSize: 48,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 3.5
-                              ),
+                            Image.asset(
+                              "assets/skoda.jpg",
+                              fit: BoxFit.cover,
+                              height: 70,
+                              //width: 50, height: 90,
                             ),
-                            const SizedBox(height: 28),
+                            const SizedBox(height: 12),
                             if(_isForSignUp)
                               Column(
                                 children: [
@@ -115,8 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                                     child: AppButton(
                                       fontSize: 18,
                                       text: !_isForSignUp ?
-                                      "Войти в аккаунт":
-                                      "Создать аккаунт",
+                                      "Войти в профиль":
+                                      "Создать",
                                       onPressed: () async{
                                         final email = _emailController.text.trim();
                                         final pass = _passwordController.text.trim();
@@ -170,8 +179,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: Text(
                                 !_isForSignUp ?
-                                "Нет аккаунта? Создайте" :
-                                "Есть аккаунт. Войти"
+                                "До сих пор нет профиля? Тогда создайте" :
+                                "Уже есть профиль. Войти"
                               )
                             ),
                           ],
@@ -180,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-              )
+              ],
             ) : const LoadingView();
           }
         )

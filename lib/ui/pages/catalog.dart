@@ -27,8 +27,8 @@ class _CatalogPageState extends State<CatalogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPage(
-      title: "Каталог",
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, top: 8, right: 12),
       child: Column(
         children: [
           DropdownPicker(

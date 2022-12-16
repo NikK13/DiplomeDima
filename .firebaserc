@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "diplomedima"
-  }
+  },
+  "targets": {
+    "diplomedima": {
+      "hosting": {
+        "skoda-auto": [
+          "skoda-auto"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

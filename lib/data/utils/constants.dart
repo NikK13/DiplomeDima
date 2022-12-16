@@ -14,7 +14,7 @@ const numberTypeForInputs = TextInputType.numberWithOptions(decimal: true);
 const String androidPl = "android";
 const String iosPl = "iOS";
 
-const String adminEmail = "admin@admin.com";
+const String adminEmail = "skoda@admin.by";
 
 const String dateFormat24h = "dd/MM/yyyy kk:mm";
 const String dateFormat12h = "dd/MM/yyyy hh:mma";
