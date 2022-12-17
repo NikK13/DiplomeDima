@@ -8,6 +8,8 @@ class Order{
   String? phone;
   String? email;
   String? date;
+  String? dateStart;
+  String? dateEnd;
 
   Order({
     this.key,
@@ -15,7 +17,9 @@ class Order{
     this.carKey,
     this.email,
     this.name,
-    this.phone
+    this.phone,
+    this.dateEnd,
+    this.dateStart,
   });
 
   factory Order.fromJson(String key, Map<String, dynamic> json) => Order(
@@ -24,7 +28,9 @@ class Order{
     carKey: json['carKey'],
     phone: json['phone'],
     email: json['email'],
-    name: json['name']
+    name: json['name'],
+    dateEnd: json['date_end'],
+    dateStart: json['date_start']
   );
 
   Map<String, Object?> toJson() => {
@@ -32,7 +38,9 @@ class Order{
     'date': date,
     'name': name,
     'phone': phone,
-    'email': email
+    'email': email,
+    'date_start': dateStart,
+    'date_end': dateEnd
   };
 }
 
@@ -68,7 +76,9 @@ class OrderItem extends StatelessWidget {
             fontWeight: FontWeight.bold
           )),
           const SizedBox(height: 4),
-          Text("Пользователь ${order!.name}"),
+          Text("${order!.dateStart} - ${order!.dateEnd}", style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          Text("${order!.name}"),
           const SizedBox(height: 4),
           Text("Телефон: ${order!.phone}"),
           const SizedBox(height: 4),

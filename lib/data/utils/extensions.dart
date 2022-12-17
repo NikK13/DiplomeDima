@@ -179,7 +179,7 @@ Widget tableCell(String data, {bool isTitle = false}) =>
         child: Text(
           data,
           style: TextStyle(
-            fontSize: isTitle ? 14 : 12,
+            fontSize: isTitle ? 18 : 17,
             fontWeight: isTitle ?
             FontWeight.bold :
             FontWeight.normal

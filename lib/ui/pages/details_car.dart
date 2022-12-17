@@ -42,20 +42,15 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: widget.car!.image!.isNotEmpty ?
-              Image.network(widget.car!.image!) :
-              emptyImage,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              "$_transmission привод, $_fuelType\n$_engineVal л.с, $_gearBox коробка передач",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600
+            SizedBox(
+              width: MediaQuery.of(context).size.width > 550 ?
+              550 : MediaQuery.of(context).size.width,
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: widget.car!.image!.isNotEmpty ?
+                Image.network(widget.car!.image!) :
+                emptyImage,
               ),
-              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
             Center(
@@ -109,6 +104,76 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
                 ],
               ),
             ),
+            if(widget.car!.desc!.isNotEmpty)
+            Column(
+              children: [
+                const SizedBox(height: 24),
+                Text(widget.car!.desc!)
+              ],
+            ),
+            const SizedBox(height: 24),
+            Table(
+              border: TableBorder.all(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey.shade800,
+                width: 1.5
+              ),
+              columnWidths: const {
+                0: FlexColumnWidth(1),
+                1: FlexColumnWidth(1),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: [
+                TableRow(
+                  children: [
+                    tableCell("Наименование", isTitle: true),
+                    tableCell("Характеристики", isTitle: true),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("Цена"),
+                    tableCell(widget.car!.price!.toString()),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("Объем двигателя"),
+                    tableCell(widget.car!.engineValue!),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("Тип двигателя"),
+                    tableCell(fuelTypes.firstWhere((element) => element.value == widget.car!.fuelType!).title),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("КПП"),
+                    tableCell(gearBoxes.firstWhere((element) => element.value == widget.car!.gearBox!).title),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("Комплектация"),
+                    tableCell(comps.firstWhere((element) => element.value == widget.car!.comp!).title),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("Привод"),
+                    tableCell(transmissions.firstWhere((element) => element.value == widget.car!.transmission!).title),
+                  ]
+                ),
+                TableRow(
+                  children: [
+                    tableCell("Тип автомобиля"),
+                    tableCell(carTypes.firstWhere((element) => element.value == widget.car!.type!).title),
+                  ]
+                ),
+              ],
+            ),
             const SizedBox(height: 24),
           ],
         ),
@@ -116,20 +181,22 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
     );
   }
 
-  void sendData(String name, String email, String phone, [bool isTestDrive = true]) async{
+  void sendData(String name, String email, String phone, String dateStart, String dateEnd, [bool isTestDrive = true]) async{
     !isTestDrive ? await appBloc.requestToBuy(
       firebaseBloc.fbUser!.uid,
       Order(
         carKey: widget.car!.key,
         name: name, phone: phone, email: email,
-        date: DateFormat(dateFormat24h).format(DateTime.now())
+        date: DateFormat(dateFormat24h).format(DateTime.now()),
+        dateStart: dateStart, dateEnd: dateEnd
       )
     ) : await appBloc.requestTestDrive(
       firebaseBloc.fbUser!.uid,
       Order(
         carKey: widget.car!.key,
         name: name, phone: phone, email: email,
-        date: DateFormat(dateFormat24h).format(DateTime.now())
+        date: DateFormat(dateFormat24h).format(DateTime.now()),
+        dateStart: dateStart, dateEnd: dateEnd
       )
     );
     setState(() {
